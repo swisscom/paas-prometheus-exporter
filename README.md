@@ -4,6 +4,29 @@ This application consumes application and service metrics from Cloud Foundry. Al
 
 The application will get metrics for all apps and services that the user has access to.
 
+## Usage on Swisscom AppCloud
+
+1. Create a new technical user on the AppCloud via the UI. (Or use your existing user if you wish)
+2. Assign the roles of `OrgAuditor` and `SpaceAuditor` to this user for any orgs and/or spaces you want to collect and expose app metrics of.
+```
+$ cf set-org-role my-username my-org OrgAuditor
+Assigning role OrgAuditor to user my-username  in org my-org as admin...
+OK
+
+$ cf set-space-role my-username my-org my-space-1 SpaceAuditor
+Assigning role RoleSpaceAuditor to user my-username in org my-org / space my-space-1 as admin...
+OK
+
+$ cf set-space-role my-username my-org my-space-2 SpaceAuditor
+Assigning role RoleSpaceAuditor to user my-username in org my-org / space my-space-2 as admin...
+OK
+```
+3. Adjust the provided `manifest.yml` and then push the exporter app, providing the necessary credentials. (`cf push --var cf_username=my-username --var cf_password=my-password --var metrics_username=metrics-auth-username --var metrics_password=metrics-auth-password`)
+
+4. `curl https://my-metrics-exporter-app.applicationcloud.io/metrics`
+
+-----
+
 To use paas-prometheus-exporter with GOV.UK PaaS, see [Use the PaaS Prometheus exporter app](https://docs.cloud.service.gov.uk/monitoring_apps.html#use-the-paas-prometheus-exporter-app) in the documentation.
 
 If you use StatsD rather than Prometheus see [alphagov/paas-metric-exporter](https://github.com/alphagov/paas-metric-exporter).

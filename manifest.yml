@@ -1,10 +1,26 @@
 ---
+# See manifest.yml documentation available at:
+# https://docs.developer.swisscom.com/devguide/deploy-apps/manifest.html
+
 applications:
 - name: prometheus-exporter
-  memory: 100M
+  memory: 128M
+  disk_quota: 128M
   instances: 1
+  health-check-type: port
+
+  routes:
+  - route: prometheus-metrics.scapp.io
+  - route: prometheus-metrics.applicationcloud.io
+
   buildpacks:
-    - go_buildpack
-  stack: cflinuxfs3
+  - go_buildpack
+
   env:
+    TZ: Europe/Zurich
     GOPACKAGENAME: github.com/alphagov/paas-prometheus-exporter
+    API_ENDPOINT: https://api.lyra-836.appcloud.swisscom.com
+    USERNAME: ((cf_username))
+    PASSWORD: ((cf_password))
+    AUTH_USERNAME: ((metrics_username))
+    AUTH_PASSWORD: ((metrics_password))
