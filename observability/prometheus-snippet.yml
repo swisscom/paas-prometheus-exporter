@@ -1,0 +1,10 @@
+## add this job to your prometheus config file
+- job_name: appcloud_metrics
+  scheme: https
+  static_configs:
+   - targets:
+      - prometheus-metrics.scapp-corp.swisscom.com # set the url to your exporter
+  metric_relabel_configs: # is necessary to reduce the cardinality of timeseries.
+      - regex: 'guid'
+        action: labeldrop
+
